@@ -1,6 +1,6 @@
 <?php
-include('includes/connect1.php');
-include('function/common fuction.php');
+include('../includes/connect1.php');
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,12 +20,6 @@ include('function/common fuction.php');
 
         bottom: 0;
     }
-
-    .card-img-top {
-        width: 100%;
-        height: 220px;
-        object-fit: contain;
-    }
     </style>
 </head>
 
@@ -43,26 +37,28 @@ include('function/common fuction.php');
             <div class="collapse navbar-collapse " id="navbarResponsive">
                 <ul class="navbar-nav ">
                     <li class="nav-item ">
-                        <a class="nav-link text-black" href="index.php">Home </a>
+                        <a class="nav-link text-black" href="../index.php">Home </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="dispaly_all.php">Products</a>
+                        <a class="nav-link " href="../dispaly_all.php">Products</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">Register</a>
-                    </li>
+                   <?php
+                      if(isset($_SESSION['username'])) {
+                        echo"<li class='nav-item'>
+                        <a class='nav-link' href='profile.php'>My Account</a>
+                    </li>";
+                      }else{
+                        echo"<li class='nav-item'>
+                        <a class='nav-link' href='user_registration.php'>Register</a>
+                    </li>";
+                      }
+                    ?>o
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="cart.php"><i class="fa fa-shopping-cart"
-                                style="font-size:24px"></i><sup><?php cart_item(); ?></sup></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Total price:<?php total_cart_price(); ?>/-</a>
-                    </li>
+            
 
-                </ul>
+              </ul>
                 <form class="d-flex ms-auto my-2 my-lg-0" action="search_product.php" method="get">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                         name="search_data">
@@ -72,72 +68,56 @@ include('function/common fuction.php');
             </div>
         </div>
     </nav>
-    <!-- calling cart function -->
-    <?php
- cart();
- ?>
     <!-- ======= second child ======= -->
     <nav class="navbar navbar-expand-lg bg-secondary">
         <ul class="navbar-nav ">
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#">Welcome guest</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#">Login</a>
-            </li>
+            
+            <?php
+            if (!isset($_SESSION['username'])) {
+                  echo " <li class='nav-item'>
+                <a class='nav-link text-white' href='#''>Welcome guest</a>
+            </li>";
+              }
+              else{
+                 echo " <li class='nav-item'>
+                <a class='nav-link text-white' href='#''>Welcome ".$_SESSION['username']."</a>
+            </li>";
+              }
+              if (!isset($_SESSION['username'])) {
+                  echo " <li class='nav-item'>
+                <a class='nav-link text-white' href='./user_login.php''>Login</a>
+            </li>";
+              }
+              else{
+                 echo " <li class='nav-item'>
+                <a class='nav-link text-white' href='logout.php''>Logout</a>
+            </li>";
+              }
+            ?>
         </ul>
     </nav>
-    <!-- ======= second child ======= -->
+     <!-- ======= second child ======= -->
     <div class="container-fluid bg-ligth">
         <h3 class="text-center">Hiddin</h3>
         <p class="text-center">commr adser asdghtsx </p>
 
     </div>
     <!-- ======= third child ======= -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="row">
-                    <?php
-           getproduct();
-           get_uniqe_caregories();
-           get_uniqe_brands();
-           // $ip = getIPAddress();  
-           // echo 'User Real IP Address - '.$ip;  
-          
-           ?>
-
-
-                </div>
-
+    <div class="row px-1">
+        <div class="col-md-12">
+            <div class="row"> 
+                 <?php
+                   if (!isset($_SESSION['username'])) {
+                       include('user_login.php');
+                   }
+                   else {
+                       include('payment.php');
+                   }
+                 ?>
             </div>
-            <div class="col-md-2 bg-secondary p-0">
-                <ul class="navbar-nav  text-center">
-                    <li class="nav-item ">
-                        <a class="nav-link text-white bg-info" href="#">
-                            <h4>Dilivery brands</h4>
-                        </a>
-                    </li>
-                    <?php
-                getbrands();  
-                ?>
-
-                </ul>
-                <ul class="navbar-nav  text-center">
-                    <li class="nav-item ">
-                        <a class="nav-link text-white bg-info" href="#">
-                            <h4>Categories</h4>
-                        </a>
-                    </li>
-                    <?php
-               getcategroies();
-                ?>
-
-                </ul>
-
-            </div>
+            
         </div>
-
+        
     </div>
     <!-- -----------last child------------- -->
     <div class="container-fluid bg-info p-3 footer">
